@@ -47,10 +47,14 @@ public class Parser {
  * 	Term -> NUMBER
  */
 
+	public static void getNextToken(Token token) {
+		Token to = token;
+		
+	}
 	
 	static boolean Program(){	
 		
-		return true;
+		return false;
 	}
 	
 	 static boolean A(){
@@ -69,9 +73,5 @@ public class Parser {
 		 return false;
 	 }
 	
-	
-	public static void getNextToken(Token token) {
-		
-	}
 	
 }
