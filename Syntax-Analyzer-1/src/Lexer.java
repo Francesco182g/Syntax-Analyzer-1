@@ -1,3 +1,5 @@
+//Created by Francesco Garofalo
+
 import java.util.HashMap;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -12,22 +14,32 @@ import java.util.logging.Logger;
 
 public class Lexer {
 	public final static Logger log = Logger.getLogger(Lexer.class.getName());
-	private static HashMap<String, Token> symbolTable = new HashMap<>();
+	public static HashMap<String, Token> symbolTable = new HashMap<>();
 	public int i = 0;
 	public int id = 1;
+	private int lTesto;
+	private String lessema;
 
-	public void getNextToken(String lessema){
+	public Lexer(String lexs) {
+		this.lessema = lexs;
 		LogManager.getLogManager().reset();
-		int lTesto = lessema.length()-1;
+		lTesto = lexs.length()-1;
 		System.out.println("Lunghezza Testo: " +lTesto +" Caratteri");
-		Token token = new Token();
-		while(i<lTesto) {
-			token = findToken(lessema, lTesto);
-			if(token.getId() != "NULL")
-			Parser.getNextToken(token);
-		}
+		
 	}
 	
+	public Token getNextToken(){
+		Token token = new Token();
+		if(i<lTesto) {
+			token = findToken(lessema, lTesto);
+			if(token.getId() != "NULL")
+			return token; 
+		} else {
+			token.setId("EndFile");
+			token.setAttribute("END");	
+		}
+		return token;
+	}
 	
 
 	/*
@@ -94,7 +106,7 @@ public class Lexer {
 					/*
 					 * CASE 0-6: c is relop =
 					 */
-				}else if(c == '=') {
+				}else if(c == ':') {
 					token = token + c;
 					log.info("Case 0: isRelop =");
 					stato = 6;
@@ -150,13 +162,13 @@ public class Lexer {
 					if(toKey.getId() == null) {
 						int ide = installID(token);
 						if(ide == 0) {
-							to.setId(""+id);
-							to.setAttribute(token);
+							to.setId("ID");
+							to.setAttribute(""+id);
 							id++;
 							return to;
 						} else {
-							to.setId(""+ide);
-							to.setAttribute(token);
+							to.setId("ID");
+							to.setAttribute(""+ide);
 							return to;
 						}
 					} else {
@@ -255,8 +267,8 @@ public class Lexer {
 					active = checkLengthText(lTesto);
 
 				} else {
-					to.setId("Relop");
-					to.setAttribute(token);
+					to.setId("ASSIGN");
+					to.setAttribute("ASSIGN");
 					return to;
 				}
 				break;
